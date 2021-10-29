@@ -1,0 +1,90 @@
+﻿@page
+@model SITConnect.Pages.Register
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Register an Account</title>
+
+    <script type="text/javascript">
+            validate = () => {
+                let str = document.getElementById('cust_pwd').value
+                
+                document.getElementById("cust_pwd_strength").innerHTML = ""
+                document.getElementById("cust_pwd_strength").style.color = "Black"
+                
+                if (str.length < 8) {
+                    document.getElementById("cust_pwd_strength").innerHTML = "Password Length must be at least 8 characters"
+                    document.getElementById("cust_pwd_strength").style.color = "Red"
+                    return "too_short"
+                } else if (str.search(/[0-9]/) === -1) {
+                    document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 number"
+                    document.getElementById("cust_pwd_strength").style.color = "Red"
+                    return "no_number"
+                } else if (str.search(/[A-Z]/) === -1) {
+                    document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 capital letter"
+                    document.getElementById("cust_pwd_strength").style.color = "Red"
+                    return "no_caps"
+                } else if (str.search(/[^a-zA-Z0-9]+/) === -1) {
+                    document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 symbol"
+                    document.getElementById("cust_pwd_strength").style.color = "Red"
+                    return "no_symbol"
+                }
+                
+                document.getElementById("cust_pwd_strength").innerHTML = "Excellent!"
+                document.getElementById("cust_pwd_strength").style.color = "Green"
+            }
+        </script>
+</head>
+<body>
+<form method="post">
+    <div>
+        <label>
+            Name
+            <input placeholder="First name" asp-for="CustFname"/>
+            <input placeholder="Last name" asp-for="CustLname"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Credit Card No.
+            <input placeholder="4242424242424242" asp-for="BillingCardno"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Email Address
+            <input placeholder="example@example.com" type="email" asp-for="CustEmail"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Password
+            <input placeholder="••••••••" type="password" onkeyup="validate()" asp-for="CustPwd"/>
+            <br/>
+            <small id="cust_pwd_strength"></small>
+            <small style="color: red">@Model.CustPasswordStatus</small>
+        </label>
+    </div>
+    <div>
+        <label>
+            Date of Birth
+            <input placeholder="01/01/2003" type="date" asp-for="CustDob"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Photo
+            <input type="file" placeholder="Picture of yourself" asp-for="CustPhoto"/>
+        </label>
+    </div>
+    <hr/>
+    <input type="submit"/>
+</form>
+</body>
+</html>
