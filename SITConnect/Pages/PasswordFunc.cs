@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace SITConnect.Pages
 {
@@ -35,6 +36,17 @@ namespace SITConnect.Pages
 
             // Exit point
             return status;
+        }
+
+        public string HashThis(string plainText)
+        {
+            // Get current year to calculate cost of bcrypt based on moore's law
+            int currentYear = DateTime.Now.Year;
+            
+            // This generates the hash based on moore's law which will determine number of iterations based on current year.
+            // This prevents brute force attacks.
+            string hash = BCrypt.Net.BCrypt.HashPassword(plainText, 2^(currentYear-2000));
+            return hash;
         }
     }
 }
