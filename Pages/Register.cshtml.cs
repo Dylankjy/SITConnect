@@ -6,7 +6,7 @@ namespace SITConnect.Pages
     public class Register : PageModel
     {
         // Import PasswordFunc
-        private readonly PasswordFunc _pwdFunc = new();
+        private readonly PasswordFunc _pwdFunc = new PasswordFunc();
 
         [BindProperty] public string CustFname { get; set; }
         [BindProperty] public string CustLname { get; set; }
