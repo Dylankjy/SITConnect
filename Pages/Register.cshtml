@@ -12,33 +12,85 @@
     <title>Register an Account</title>
 
     <script type="text/javascript">
-            validate = () => {
-                let str = document.getElementById('cust_pwd').value
+            checkPasswordStrength = () => {
+                let password = document.getElementById('cust_pwd').value
                 
                 document.getElementById("cust_pwd_strength").innerHTML = ""
                 document.getElementById("cust_pwd_strength").style.color = "Black"
                 
-                if (str.length < 8) {
+                if (password.length < 8) {
                     document.getElementById("cust_pwd_strength").innerHTML = "Password Length must be at least 8 characters"
                     document.getElementById("cust_pwd_strength").style.color = "Red"
                     return "too_short"
-                } else if (str.search(/[0-9]/) === -1) {
+                } else if (password.search(/[0-9]/) === -1) {
                     document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 number"
                     document.getElementById("cust_pwd_strength").style.color = "Red"
                     return "no_number"
-                } else if (str.search(/[A-Z]/) === -1) {
+                } else if (password.search(/[A-Z]/) === -1) {
                     document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 capital letter"
                     document.getElementById("cust_pwd_strength").style.color = "Red"
                     return "no_caps"
-                } else if (str.search(/[^a-zA-Z0-9]+/) === -1) {
+                } else if (password.search(/[^a-zA-Z0-9]+/) === -1) {
                     document.getElementById("cust_pwd_strength").innerHTML = "Password require at least 1 symbol"
                     document.getElementById("cust_pwd_strength").style.color = "Red"
                     return "no_symbol"
                 }
-                
+                                
                 document.getElementById("cust_pwd_strength").innerHTML = "Excellent!"
                 document.getElementById("cust_pwd_strength").style.color = "Green"
             }
+            
+            // validate = () => {
+            //     // validate other fields
+            //     let fname = document.getElementById('cust_fname').value
+            //     let lname = document.getElementById('cust_lname').value
+            //     let cardno = document.getElementById('cust_cardno').value
+            //     let email = document.getElementById('cust_email').value
+            //     let password = document.getElementById('cust_pwd').value
+            //     let dob = document.getElementById('cust_dob').value
+            //     let photo = document.getElementById('cust_photo').value
+            //    
+            //     let abortFormSubmission = false
+            //    
+            //     if (fname === "") {
+            //         document.getElementById("cust_fname_warn").innerHTML = "Field cannot be empty"
+            //         document.getElementById("cust_fname_warn").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     if (lname === "") {
+            //         document.getElementById("cust_lname_warn").innerHTML = "Field cannot be empty"
+            //         document.getElementById("cust_lname_warn").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     if (cardno === "") {
+            //         document.getElementById("cust_cardno_warn").innerHTML = "Enter your card number"
+            //         document.getElementById("cust_cardno_warn").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     if (email === "") {
+            //         document.getElementById("cust_email_warn").innerHTML = "Enter an Email Address"
+            //         document.getElementById("cust_email_warn").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     if (password === "") {
+            //         document.getElementById("cust_pwd_strength").innerHTML = "You need to set a password"
+            //         document.getElementById("cust_pwd_strength").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     if (dob === "") {
+            //         document.getElementById("cust_dob_warn").innerHTML = "Field cannot be empty"
+            //         document.getElementById("cust_dob_warn").style.color = "Red"
+            //         abortFormSubmission = true
+            //     }
+            //    
+            //     // Check whether to abort form submission
+            //     return !abortFormSubmission;
+            // }
         </script>
 </head>
 <body>
@@ -46,26 +98,30 @@
     <div>
         <label>
             Name
-            <input placeholder="First name" asp-for="CustFname"/>
-            <input placeholder="Last name" asp-for="CustLname"/>
+            <input id="cust_fname" placeholder="First name" asp-for="NewUser.FirstName" required/>
+            <small id="cust_fname_warn"></small>
+            <input id="cust_lname" placeholder="Last name" asp-for="NewUser.LastName" required/>
+            <small id="cust_lname_warn"></small>
         </label>
     </div>
     <div>
         <label>
             Credit Card No.
-            <input placeholder="4242424242424242" asp-for="BillingCardno"/>
+            <input id="cust_cardno" placeholder="4242424242424242" asp-for="BillingCardNo" required/>
+            <small id="cust_cardno_warn"></small>
         </label>
     </div>
     <div>
         <label>
             Email Address
-            <input placeholder="example@example.com" type="email" asp-for="CustEmail"/>
+            <input id="cust_email" placeholder="example@example.com" type="email" asp-for="NewUser.Email" required/>
+            <small id="cust_email_warn"></small>
         </label>
     </div>
     <div>
         <label>
             Password
-            <input placeholder="••••••••" type="password" onkeyup="validate()" asp-for="CustPwd"/>
+            <input id="cust_pwd" placeholder="••••••••" type="password" onkeyup="checkPasswordStrength()" asp-for="IncomingPasswordText" required/>
             <br/>
             <small id="cust_pwd_strength"></small>
             <small style="color: red">@Model.CustPasswordStatus</small>
@@ -74,13 +130,14 @@
     <div>
         <label>
             Date of Birth
-            <input placeholder="01/01/2003" type="date" asp-for="CustDob"/>
+            <input id="cust_dob" placeholder="01/01/2003" type="date" asp-for="NewUser.DateOfBirth" required/>
+            <small id="cust_dob_warn"></small>
         </label>
     </div>
     <div>
         <label>
             Photo
-            <input type="file" placeholder="Picture of yourself" asp-for="CustPhoto"/>
+            @* <input id="cust_photo" type="file" placeholder="Picture of yourself" asp-for="NewUser.Photo"/> *@
         </label>
     </div>
     <hr/>
