@@ -1,0 +1,32 @@
+﻿@page
+@model SITConnect.Pages.Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login to your Account</title>
+</head>
+<body>
+<form method="post">
+    <div>
+        <label>
+            Email Address
+            <input id="cust_email" placeholder="01/01/2003" type="email" asp-for="Email" required/>
+            <small id="cust_email_warn"></small>
+        </label>
+    </div>
+    <div>
+        <label>
+            Password
+            <input id="cust_pwd" placeholder="••••••••" type="password" asp-for="Password" required/>
+            <small id="cust_pwd_warn"></small>
+        </label>
+    </div>
+</form>
+</body>
+</html>
