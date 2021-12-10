@@ -14,7 +14,7 @@ namespace SITConnect.Models
     public class User
     {
         // ID uses Twitter snowflake instead of incremental
-        public long Id { get; set; } = new IdGenerator(0).CreateId();
+        public long Id { get; } = new IdGenerator(0).CreateId();
 
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
