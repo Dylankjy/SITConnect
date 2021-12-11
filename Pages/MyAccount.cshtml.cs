@@ -13,6 +13,7 @@ namespace SITConnect.Pages
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("user") == null) return RedirectToPage("Error403");
+            if (HttpContext.Session.GetString("passwordReset") != null) return RedirectToPage("ChangePassword");
 
             // Get user in session
             CurrentUser = new User().FromJson(HttpContext.Session.GetString("user"));

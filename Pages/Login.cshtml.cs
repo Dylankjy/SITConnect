@@ -49,11 +49,15 @@ namespace SITConnect.Pages
             
             // Check whether account or IP is blocked
             // This block of code blocks the account or IP for 15 minutes after 3 attempts
+            
+            // Get records for the past 15min
             var auditLogsByUserId = _auditDb.GetLogsByUserId(selectedUser.Id)
-                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed");
+                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed")
+                .OrderBy(o => o.Timestamp);
             
             var auditLogsByIp = _auditDb.GetLogsByIp(HttpContext.Connection.RemoteIpAddress.ToString())
-                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed");
+                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed")
+                .OrderBy(o => o.Timestamp);;
 
             if (auditLogsByUserId.Count() > 2 || auditLogsByIp.Count() > 2)
             {
@@ -106,6 +110,14 @@ namespace SITConnect.Pages
             auditObject.LogType = "login_success";
             auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
             _auditDb.AddLog(auditObject);
+            
+            // Check whether the user needs a password update
+            var auditLogsForPasswordChanges = _auditDb.GetLogsByUserId(selectedUser.Id);
+            if (!auditLogsForPasswordChanges.Any(o => o.Timestamp >= DateTime.Now.AddMinutes(-20) && o.LogType == "password_changed"))
+            {
+                HttpContext.Session.SetString("passwordReset", "mmm yes you need password update, you insecure child");
+                return RedirectToPage("/ChangePassword");
+            }
 
             return RedirectToPage("/MyAccount");
         }

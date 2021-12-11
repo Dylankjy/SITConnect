@@ -24,6 +24,7 @@ namespace SITConnect.Pages
         
         public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("passwordReset") != null) return RedirectToPage("ChangePassword");
             if (!ModelState.IsValid && HttpContext.Session.GetString("user") == null)
             {
                 return RedirectToPage("/Error403");

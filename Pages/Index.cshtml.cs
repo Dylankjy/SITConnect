@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace SITConnect.Pages
@@ -12,8 +15,11 @@ namespace SITConnect.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("passwordReset") != null) return RedirectToPage("ChangePassword");
+
+            return Page();
         }
     }
 }
