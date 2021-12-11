@@ -94,6 +94,7 @@
         </script>
 </head>
 <body>
+<p>@Model.Message</p>
 <form method="post">
     <div>
         <label>
@@ -115,7 +116,7 @@
         <label>
             Email Address
             <input id="cust_email" placeholder="example@example.com" type="email" asp-for="NewUser.Email" required/>
-            <small id="cust_email_warn"></small>
+            <small id="cust_email_warn" class="text-danger">@Model.EmailStatus</small>
         </label>
     </div>
     <div>
@@ -123,8 +124,7 @@
             Password
             <input id="cust_pwd" placeholder="••••••••" type="password" onkeyup="checkPasswordStrength()" asp-for="IncomingPasswordText" required/>
             <br/>
-            <small id="cust_pwd_strength"></small>
-            <small style="color: red">@Model.CustPasswordStatus</small>
+            <small id="cust_pwd_strength">@Model.CustPasswordStatus</small>
         </label>
     </div>
     <div>
@@ -140,8 +140,9 @@
             @* <input id="cust_photo" type="file" placeholder="Picture of yourself" asp-for="NewUser.Photo"/> *@
         </label>
     </div>
+    <button type="submit">Continue</button>
     <hr/>
-    <input type="submit"/>
+    <p>Already have an account? <a href="/Login">Log in instead.</a></p>
 </form>
 </body>
 </html>
