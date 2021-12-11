@@ -22,20 +22,16 @@ namespace SITConnect
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(3);
+            });
             
             services.AddDbContext<UserDbContext>();
             services.AddTransient<UserService>();
 
             services.AddDbContext<AuditLogDbContext>();
             services.AddTransient<AuditLogService>();
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Login";
-                options.LogoutPath = "/Logout";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(3); // This sets the duration to 3 mins for session expiration
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
