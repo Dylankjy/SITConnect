@@ -27,7 +27,7 @@ namespace SITConnect.Pages
 
         public IActionResult OnGet()
         {
-            if (ModelState.IsValid && HttpContext.Session.GetString("user") != null)
+            if (HttpContext.Session.GetString("user") != null)
             {
                 // Get user in session
                 var currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
