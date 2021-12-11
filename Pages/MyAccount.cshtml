@@ -1,0 +1,31 @@
+﻿@page
+@model SITConnect.Pages.MyAccount
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Welcome back</title>
+</head>
+<body>
+<h1>Welcome back, @Model.CurrentUser.FirstName @Model.CurrentUser.LastName.</h1>
+<hr/>
+<p><b>Account information:</b></p>
+<ul>
+    <li><b>Email address:</b> @Model.CurrentUser.Email</li>
+    <li><b>Date of birth:</b> @Model.CurrentUser.DateOfBirth.Date</li>
+</ul>
+<p><b>Billing information:</b></p>
+<p>The current card number we have on file is @Model.CurrentUserCardNumber</p>
+<hr/>
+<p><b>Finished browsing?</b></p>
+<form method="post">
+    <p><button type="submit" value="logout" formaction="/Logout">Log out</button></p>
+</form>
+    
+</body>
+</html>

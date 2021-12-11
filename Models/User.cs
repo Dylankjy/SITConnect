@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using CreditCardValidator;
 using IdGen;
+using Newtonsoft.Json;
 using SITConnect.Pages;
 
 namespace SITConnect.Models
@@ -14,7 +17,8 @@ namespace SITConnect.Models
     public class User
     {
         // ID uses Twitter snowflake instead of incremental
-        public long Id { get; } = new IdGenerator(0).CreateId();
+        [DatabaseGenerated(DatabaseGeneratedOption.None), Key]
+        public long Id { get; set; } = new IdGenerator(0).CreateId();
 
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
@@ -136,6 +140,16 @@ namespace SITConnect.Models
                 // Convert back to string and return plain text
                 return Encoding.UTF8.GetString(decryptedText);
             }
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public User FromJson(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<User>(jsonString);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,9 +22,20 @@ namespace SITConnect
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddSession();
+            
             services.AddDbContext<UserDbContext>();
             services.AddTransient<UserService>();
-            services.AddSession();
+
+            services.AddDbContext<AuditLogDbContext>();
+            services.AddTransient<AuditLogService>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(3); // This sets the duration to 3 mins for session expiration
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +58,8 @@ namespace SITConnect
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
         }
