@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SITConnect.Models;
@@ -29,9 +30,18 @@ namespace SITConnect.Pages
         public string CardStatus { get; set; }
         public string Message { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            // Empty
+            // Prevent loggedin from viewing this page
+            if (ModelState.IsValid && HttpContext.Session.GetString("user") != null)
+            {
+                // Get user in session
+                User currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
+
+                return RedirectToPage("/MyAccount");
+            }
+
+            return Page();
         }
 
         public IActionResult OnPost()
