@@ -1,6 +1,9 @@
-﻿using IdGen;
+﻿using System;
+using IdGen;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using SITConnect.Models;
 using SITConnect.Services;
 
@@ -8,11 +11,13 @@ namespace SITConnect.Pages
 {
     public class Login : PageModel
     {
-        private readonly UserService _svc;
+        private readonly UserService _userDb;
+        private readonly AuditLogService _auditDb;
 
-        public Login(UserService service)
+        public Login(UserService userService, AuditLogService auditService)
         {
-            _svc = service;
+            _userDb = userService;
+            _auditDb = auditService;
         }
 
         [BindProperty] public string Email { get; set; }
@@ -20,14 +25,25 @@ namespace SITConnect.Pages
 
         public string ErrorMessage { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (ModelState.IsValid && HttpContext.Session.GetString("user") != null)
+            {
+                // Get user in session
+                User currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
+
+                return RedirectToPage("/MyAccount");
+            }
+
+            return Page();
         }
 
         public IActionResult OnPost()
         {
-            var selectedUser = _svc.GetUserByEmail(Email);
-
+            // Declare variable
+            User selectedUser = _userDb.GetUserByEmail(Email);
+            AuditLog auditObject = new AuditLog();
+            
             // Handle when email is invalid
             if (selectedUser == null)
             {
@@ -36,6 +52,7 @@ namespace SITConnect.Pages
                 // a timing similar to valid email addresses.
                 // Uses snowflake id generator for random bytes
                 selectedUser = new User();
+                selectedUser.Email = null;
                 selectedUser.SetPassword(new IdGenerator(0).CreateId().ToString());
             }
 
@@ -43,11 +60,30 @@ namespace SITConnect.Pages
             if (!selectedUser.ComparePassword(Password))
             {
                 ErrorMessage = "Login details does not match our records. Please check your email and password.";
+                
+                // Add to audit log only if account is associated to an account
+                if (selectedUser.Email != null) {
+                    auditObject.ActorId = selectedUser.Id;
+                    auditObject.Timestamp = DateTime.Now;
+                    auditObject.LogType = "login_failed";
+                    auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+                    _auditDb.AddLog(auditObject);
+                }
+                
                 return Page();
             }
 
+            // If all is well, set the session
+            HttpContext.Session.SetString("user", selectedUser.ToJson());
+            
+            // And then add a new audit log accounting for the successful login
+            auditObject.ActorId = selectedUser.Id;
+            auditObject.Timestamp = DateTime.Now;
+            auditObject.LogType = "login_success";
+            auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            _auditDb.AddLog(auditObject);
 
-            return Page();
+            return RedirectToPage("/MyAccount");
         }
     }
 }
