@@ -83,8 +83,6 @@ namespace SITConnect.Models
 
             string iv = elements[1];
             string key = elements[2];
-            Console.WriteLine(iv);
-            Console.WriteLine(key);
 
             string decryptedCardNo = Decrypt(BillingCardNo, iv, key);
 
