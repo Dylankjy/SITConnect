@@ -1,0 +1,43 @@
+﻿@page
+@model SITConnect.Pages.AuditDisplay
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<h1>Account audit logs</h1>
+<p>Showing logs for this account.</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Timestamp</th>
+        <th>IP Address</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        if (Model.AuditLogsToDisplay != null)
+        {
+
+            @foreach (var item in Model.AuditLogsToDisplay)
+            {
+                <tr>
+                    <td>@item.Timestamp</td>
+                    <td>@item.IpAddress</td>
+                    <td>@item.LogType</td>
+                </tr>
+            }
+        }
+    }
+    </tbody>
+</table>
+</body>
+</html>
