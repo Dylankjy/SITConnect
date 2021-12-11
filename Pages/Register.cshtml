@@ -107,8 +107,8 @@
     <div>
         <label>
             Credit Card No.
-            <input id="cust_cardno" placeholder="4242424242424242" asp-for="BillingCardNo" required/>
-            <small id="cust_cardno_warn"></small>
+            <input id="cust_cardno" placeholder="4242424242424242" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="16" asp-for="BillingCardNo" required/>
+            <small id="cust_cardno_warn" class="text-danger">@Model.CardStatus</small>
         </label>
     </div>
     <div>

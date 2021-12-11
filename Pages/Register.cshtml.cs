@@ -23,6 +23,7 @@ namespace SITConnect.Pages
         [BindProperty] public string BillingCardNo { get; set; }
 
         public string CustPasswordStatus { get; set; }
+        public string CardStatus { get; set; }
 
         public void OnGet()
         {
@@ -40,7 +41,13 @@ namespace SITConnect.Pages
             // }
 
             NewUser.SetPassword(IncomingPasswordText);
-            NewUser.SetCardNo(BillingCardNo);
+            bool isCardValid = NewUser.SetCardNo(BillingCardNo);
+
+            if (!isCardValid)
+            {
+                CardStatus = "The card number provided is not valid.";
+                return Page();
+            }
 
             Console.WriteLine(NewUser.Id);
             Console.WriteLine(NewUser.Email);

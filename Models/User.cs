@@ -41,8 +41,16 @@ namespace SITConnect.Models
             return isPasswordMatching;
         }
         
-        public void SetCardNo(string plainText)
+        public bool SetCardNo(string plainText)
         {
+            // Validate card number
+            CreditCardDetector detector = new CreditCardDetector(plainText);
+            bool isValid = detector.IsValid();
+            if (!isValid)
+            {
+                return false;
+            }
+            
             RandomStringGen randString = new RandomStringGen();
             
             // Use random generator to generate password (512 characters)
@@ -56,6 +64,8 @@ namespace SITConnect.Models
             
             // Write the User ID, Initialisation Vector and encryption key to txt file stored in /CryptoStore/keys.csv
             File.AppendAllText(Environment.CurrentDirectory + @"\CryptoStore\keys.csv", $"{Id},{encryptionResult.Item1},{encryptionResult.Item3}" + Environment.NewLine);
+
+            return true;
         }
 
         public dynamic GetCardNo()
