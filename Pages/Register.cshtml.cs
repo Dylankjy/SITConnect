@@ -36,14 +36,14 @@ namespace SITConnect.Pages
 
         public IActionResult OnPost()
         {
-            Console.WriteLine("New user account");
-            // CustPasswordStatus = _pwdFunc.GetPasswordStrength(IncomingPasswordText);
+            // Check whether password is strong enough
+            if (_pwdFunc.GetPasswordStrength(IncomingPasswordText) != "Excellent")
+            {
+                CustPasswordStatus = "Your password is too weak. Please enter a stronger one";
+                return Page();
+            }
 
-            // if (CustPasswordStatus == "Weak" || CustPasswordStatus == "Very Weak")
-            // {
-            //     return Page();
-            // }
-
+            // Special fields setters
             NewUser.SetPassword(IncomingPasswordText);
             bool isCardValid = NewUser.SetCardNo(BillingCardNo);
 
@@ -53,12 +53,6 @@ namespace SITConnect.Pages
                 return Page();
             }
 
-            Console.WriteLine(NewUser.Id);
-            Console.WriteLine(NewUser.Email);
-            Console.WriteLine(NewUser.FirstName);
-            Console.WriteLine(NewUser.LastName);
-            Console.WriteLine(NewUser.DateOfBirth);
-            Console.WriteLine(NewUser.GetCardNo());
             // Check for existing user accounts with the same email address
             if (_userDb.GetUserByEmail(NewUser.Email) != null)
             {
@@ -84,3 +78,9 @@ namespace SITConnect.Pages
     }
 }
 
+// Console.WriteLine(NewUser.Id);
+// Console.WriteLine(NewUser.Email);
+// Console.WriteLine(NewUser.FirstName);
+// Console.WriteLine(NewUser.LastName);
+// Console.WriteLine(NewUser.DateOfBirth);
+// Console.WriteLine(NewUser.GetCardNo());
