@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -35,12 +36,14 @@ namespace SITConnect.Models
             // Using a work factor of 12. 10 is the industry standard.
             var hash = BCrypt.Net.BCrypt.HashPassword(plainText, 12);
 
-            Password = hash;
+            Password = $"{hash};~;{Password}";
         }
 
         public bool ComparePassword(string incoming)
         {
-            var isPasswordMatching = BCrypt.Net.BCrypt.Verify(incoming, Password);
+            string currentPassword = Password.Split(";~;")[0];
+            
+            var isPasswordMatching = BCrypt.Net.BCrypt.Verify(incoming, currentPassword);
             return isPasswordMatching;
         }
 
@@ -145,7 +148,15 @@ namespace SITConnect.Models
 
         public User FromJson(string jsonString)
         {
-            return JsonConvert.DeserializeObject<User>(jsonString);
+            try
+            {
+                return JsonConvert.DeserializeObject<User>(jsonString);
+            }
+            catch (ArgumentNullException)
+            {
+                return null;
+            }
+            
         }
     }
 }
