@@ -25,5 +25,12 @@ namespace SITConnect.Services
             return listOfLogs;
             // Reminder to self: .ToList() if it needs to be read. This returns an IQueryable to allow Linq to work.
         }
+        
+        public IQueryable<AuditLog> GetLogsByIp(string ipAddress)
+        {
+            var listOfLogs = _context.Audits.Where(o => o.IpAddress == ipAddress);
+            return listOfLogs;
+            // Reminder to self: .ToList() if it needs to be read. This returns an IQueryable to allow Linq to work.
+        }
     }
 }

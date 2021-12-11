@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using IdGen;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,18 +43,35 @@ namespace SITConnect.Pages
             // Declare variable
             var selectedUser = _userDb.GetUserByEmail(Email);
             var auditObject = new AuditLog();
+            
+            // If selectedUser is invalid, initialise with empty object
+            selectedUser ??= new User();
+            
+            // Check whether account or IP is blocked
+            // This block of code blocks the account or IP for 15 minutes after 3 attempts
+            var auditLogsByUserId = _auditDb.GetLogsByUserId(selectedUser.Id)
+                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed");
+            
+            var auditLogsByIp = _auditDb.GetLogsByIp(HttpContext.Connection.RemoteIpAddress.ToString())
+                .Where(o => o.Timestamp >= DateTime.Now.AddMinutes(-15) && o.LogType == "login_failed");
+
+            if (auditLogsByUserId.Count() > 2 || auditLogsByIp.Count() > 2)
+            {
+                ErrorMessage = "Too many login attempts. Try again later.";
+                return Page();
+            }
+
 
             // Handle when email is invalid
-            if (selectedUser == null)
+            if (selectedUser.Email == null)
             {
                 // This generates a random string of bytes as the password to prevent timing attacks
                 // Treats an invalid email address as valid and passes it through the Hashing Algorithm to produce
                 // a timing similar to valid email addresses.
                 // Uses snowflake id generator for random bytes
-                selectedUser = new User();
-                selectedUser.Email = null;
                 selectedUser.SetPassword(new IdGenerator(0).CreateId().ToString());
             }
+
 
             // Compare passwords
             if (!selectedUser.ComparePassword(Password))
@@ -64,6 +82,12 @@ namespace SITConnect.Pages
                 if (selectedUser.Email != null)
                 {
                     auditObject.ActorId = selectedUser.Id;
+                    auditObject.Timestamp = DateTime.Now;
+                    auditObject.LogType = "login_failed";
+                    auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+                    _auditDb.AddLog(auditObject);
+                } else {
+                    auditObject.ActorId = 0;
                     auditObject.Timestamp = DateTime.Now;
                     auditObject.LogType = "login_failed";
                     auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
