@@ -27,6 +27,7 @@ namespace SITConnect.Pages
         public string CustPasswordStatus { get; set; }
         public string EmailStatus { get; set; }
         public string CardStatus { get; set; }
+        public string Message { get; set; }
 
         public void OnGet()
         {
@@ -67,8 +68,19 @@ namespace SITConnect.Pages
 
             // Create user account
             _userDb.AddUser(NewUser);
+            
+            // Add to audit log
+            AuditLog auditObject = new AuditLog();
+            auditObject.ActorId = NewUser.Id;
+            auditObject.Timestamp = DateTime.Now;
+            auditObject.LogType = "create_account";
+            auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+            _auditDb.AddLog(auditObject);
 
-            return RedirectToPage('/');
+            Message = "Your account has successfully been created. You may login now.";
+
+            return Page();
         }
     }
 }
+
