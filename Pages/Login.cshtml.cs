@@ -3,7 +3,6 @@ using IdGen;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using SITConnect.Models;
 using SITConnect.Services;
 
@@ -11,8 +10,8 @@ namespace SITConnect.Pages
 {
     public class Login : PageModel
     {
-        private readonly UserService _userDb;
         private readonly AuditLogService _auditDb;
+        private readonly UserService _userDb;
 
         public Login(UserService userService, AuditLogService auditService)
         {
@@ -30,7 +29,7 @@ namespace SITConnect.Pages
             if (ModelState.IsValid && HttpContext.Session.GetString("user") != null)
             {
                 // Get user in session
-                User currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
+                var currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
 
                 return RedirectToPage("/MyAccount");
             }
@@ -41,9 +40,9 @@ namespace SITConnect.Pages
         public IActionResult OnPost()
         {
             // Declare variable
-            User selectedUser = _userDb.GetUserByEmail(Email);
-            AuditLog auditObject = new AuditLog();
-            
+            var selectedUser = _userDb.GetUserByEmail(Email);
+            var auditObject = new AuditLog();
+
             // Handle when email is invalid
             if (selectedUser == null)
             {
@@ -60,22 +59,23 @@ namespace SITConnect.Pages
             if (!selectedUser.ComparePassword(Password))
             {
                 ErrorMessage = "Login details does not match our records. Please check your email and password.";
-                
+
                 // Add to audit log only if account is associated to an account
-                if (selectedUser.Email != null) {
+                if (selectedUser.Email != null)
+                {
                     auditObject.ActorId = selectedUser.Id;
                     auditObject.Timestamp = DateTime.Now;
                     auditObject.LogType = "login_failed";
                     auditObject.IpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
                     _auditDb.AddLog(auditObject);
                 }
-                
+
                 return Page();
             }
 
             // If all is well, set the session
             HttpContext.Session.SetString("user", selectedUser.ToJson());
-            
+
             // And then add a new audit log accounting for the successful login
             auditObject.ActorId = selectedUser.Id;
             auditObject.Timestamp = DateTime.Now;

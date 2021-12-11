@@ -9,11 +9,12 @@ namespace SITConnect.Pages
 {
     public class Register : PageModel
     {
+        private readonly AuditLogService _auditDb;
+
         // Import PasswordFunc
         private readonly PasswordFunc _pwdFunc = new PasswordFunc();
 
         private readonly UserService _userDb;
-        private readonly AuditLogService _auditDb;
 
         public Register(UserService userService, AuditLogService auditService)
         {
@@ -36,7 +37,7 @@ namespace SITConnect.Pages
             if (ModelState.IsValid && HttpContext.Session.GetString("user") != null)
             {
                 // Get user in session
-                User currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
+                var currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
 
                 return RedirectToPage("/MyAccount");
             }
@@ -55,7 +56,7 @@ namespace SITConnect.Pages
 
             // Special fields setters
             NewUser.SetPassword(IncomingPasswordText);
-            bool isCardValid = NewUser.SetCardNo(BillingCardNo);
+            var isCardValid = NewUser.SetCardNo(BillingCardNo);
 
             if (!isCardValid)
             {
@@ -72,9 +73,9 @@ namespace SITConnect.Pages
 
             // Create user account
             _userDb.AddUser(NewUser);
-            
+
             // Add to audit log
-            AuditLog auditObject = new AuditLog();
+            var auditObject = new AuditLog();
             auditObject.ActorId = NewUser.Id;
             auditObject.Timestamp = DateTime.Now;
             auditObject.LogType = "create_account";
