@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
@@ -41,8 +40,8 @@ namespace SITConnect.Models
 
         public bool ComparePassword(string incoming)
         {
-            string currentPassword = Password.Split(";~;")[0];
-            
+            var currentPassword = Password.Split(";~;")[0];
+
             var isPasswordMatching = BCrypt.Net.BCrypt.Verify(incoming, currentPassword);
             return isPasswordMatching;
         }
@@ -156,7 +155,6 @@ namespace SITConnect.Models
             {
                 return null;
             }
-            
         }
     }
 }
