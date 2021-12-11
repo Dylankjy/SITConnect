@@ -11,11 +11,13 @@ namespace SITConnect.Pages
         // Import PasswordFunc
         private readonly PasswordFunc _pwdFunc = new PasswordFunc();
 
-        private readonly UserService _svc;
+        private readonly UserService _userDb;
+        private readonly AuditLogService _auditDb;
 
-        public Register(UserService service)
+        public Register(UserService userService, AuditLogService auditService)
         {
-            _svc = service;
+            _userDb = userService;
+            _auditDb = auditService;
         }
 
         [BindProperty] public User NewUser { get; set; }
@@ -57,7 +59,7 @@ namespace SITConnect.Pages
             Console.WriteLine(NewUser.GetCardNo());
 
             // Create user account
-            _svc.AddUser(NewUser);
+            _userDb.AddUser(NewUser);
 
             return RedirectToPage('/');
         }
