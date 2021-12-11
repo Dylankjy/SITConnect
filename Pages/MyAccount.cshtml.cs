@@ -9,14 +9,11 @@ namespace SITConnect.Pages
     {
         public User CurrentUser;
         public string CurrentUserCardNumber;
-        
+
         public IActionResult OnGet()
         {
-            if (!ModelState.IsValid || HttpContext.Session.GetString("user") == null)
-            {
-                return RedirectToPage("Error403");
-            }
-            
+            if (!ModelState.IsValid || HttpContext.Session.GetString("user") == null) return RedirectToPage("Error403");
+
             // Get user in session
             CurrentUser = new User().FromJson(HttpContext.Session.GetString("user"));
             string cardNo = CurrentUser.GetCardNo();

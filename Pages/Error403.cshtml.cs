@@ -4,9 +4,8 @@ namespace SITConnect.Pages
 {
     public class Error403 : PageModel
     {
-    public void OnGet()
-    {
-        
-    }
+        public void OnGet()
+        {
+        }
     }
 }
