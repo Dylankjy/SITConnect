@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using SITConnect.Models;
@@ -31,9 +32,26 @@ namespace SITConnect.Services
 
         public User GetUserByEmail(string email)
         {
-            var userObject = _context.Users.SingleOrDefault(o => o.Email == email);
-            return userObject;
+            try
+            {
+                return _context.Users.SingleOrDefault(o => o.Email == email);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
+
+        // public bool CheckEmailExist(string email)
+        // {
+        //     Console.WriteLine(GetUserByEmail(email));
+        //     if (GetUserByEmail(email) == null)
+        //     {
+        //         return false;
+        //     }
+        //
+        //     return true;
+        // }
 
         public bool DestroyUser(long id)
         {
