@@ -31,10 +31,15 @@
 <p>The current card number we have on file is @Model.CurrentUserCardNumber</p>
 <hr/>
 <p>
-    <b>Account audit</b>
+    <b>Security &amp; Audits</b>
 </p>
 <p>
-    <a asp-page="AuditDisplay">View logs</a>
+    Check your account activity:<br/>
+    <a class="btn btn-light" asp-page="AuditDisplay">View logs</a>
+</p>
+<p>
+    Change your password routinely to ensure security:<br/>
+    <a class="btn btn-light" asp-page="ChangePassword">Change password</a>
 </p>
 <hr/>
 <p>
@@ -42,7 +47,7 @@
 </p>
 <form method="post">
     <p>
-        <button type="submit" value="logout" formaction="/Logout">Log out</button>
+        <button class="btn btn-light" type="submit" value="logout" formaction="/Logout">Log out</button>
     </p>
 </form>
 
