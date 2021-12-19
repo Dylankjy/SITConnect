@@ -88,10 +88,3 @@ namespace SITConnect.Pages
         }
     }
 }
-
-// Console.WriteLine(NewUser.Id);
-// Console.WriteLine(NewUser.Email);
-// Console.WriteLine(NewUser.FirstName);
-// Console.WriteLine(NewUser.LastName);
-// Console.WriteLine(NewUser.DateOfBirth);
-// Console.WriteLine(NewUser.GetCardNo());
