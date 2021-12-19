@@ -17,13 +17,19 @@ namespace SITConnect.Pages
             _auditDb = auditService;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            // Empty
+            return RedirectToPage("Login");
         }
 
         public IActionResult OnPost()
         {
+            // Check whether user is active in session
+            if (HttpContext.Session.GetString("user") == null)
+            {
+                return RedirectToPage("Login");
+            }
+            
             // Add to audit
             _auditDb.AddLog(new AuditLog
             {
