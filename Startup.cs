@@ -32,6 +32,9 @@ namespace SITConnect
 
             services.AddDbContext<AuditLogDbContext>();
             services.AddTransient<AuditLogService>();
+
+            services.AddDbContext<OtpDbContext>();
+            services.AddTransient<OtpCodeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -25,6 +25,10 @@ namespace SITConnect.Pages
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("passwordReset") != null) return RedirectToPage("ChangePassword");
+            
+            // Get whether user is authorised after OTP
+            if (HttpContext.Session.GetString("otpAuthorisation") == "0") return RedirectToPage("Login");
+            
             if (!ModelState.IsValid && HttpContext.Session.GetString("user") == null)
             {
                 return RedirectToPage("/Error403");
