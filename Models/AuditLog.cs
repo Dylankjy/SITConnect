@@ -13,7 +13,7 @@ namespace SITConnect.Models
 
         public long ActorId { get; set; }
         public string LogType { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
         public string IpAddress { get; set; }
     }
 }
