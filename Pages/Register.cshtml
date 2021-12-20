@@ -92,11 +92,23 @@
             //     // Check whether to abort form submission
             //     return !abortFormSubmission;
             // }
+            
+            const toBase64 = file => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+            
+            async function uploadedPhoto() {
+               const file = document.getElementById("cust_photo").files[0];
+               $('#cust_photo_base64').val(await toBase64(file));
+            }
         </script>
 </head>
 <body>
 <p>@Model.Message</p>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     @Html.ReCaptcha()
     <recaptcha/>
     <div>
@@ -140,7 +152,8 @@
     <div>
         <label>
             Photo
-            <input id="cust_photo" type="file" placeholder="Picture of yourself" asp-for="NewUser.Photo" accept="image/png, image/gif, image/jpeg" required/>
+            <input id="cust_photo" onchange="uploadedPhoto()" type="file" placeholder="Picture of yourself" accept="image/png, image/gif, image/jpeg" required/>
+            <input type="hidden" id="cust_photo_base64" asp-for="NewUser.Photo" required/>
         </label>
     </div>
     <button type="submit">Continue</button>

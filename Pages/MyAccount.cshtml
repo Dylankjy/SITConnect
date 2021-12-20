@@ -10,8 +10,17 @@
 <html>
 <head>
     <title>Welcome back</title>
+    <style>
+        #pfp_img {
+            border-radius: 999999rem;
+            height: 6rem;
+            width: 6rem;
+        }
+    </style>
 </head>
 <body>
+<img id="pfp_img" src="@Model.CurrentUser.Photo"  alt="Your profile picture"/>
+<br/>
 <h1>Welcome back, @Model.CurrentUser.FirstName @Model.CurrentUser.LastName.</h1>
 <hr/>
 <p>

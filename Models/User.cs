@@ -28,7 +28,7 @@ namespace SITConnect.Models
         public string Password { get; set; }
 
         [Required] public DateTime DateOfBirth { get; set; }
-        [Required] public byte[] Photo { get; set; }
+        [Required] public string Photo { get; set; }
 
         public void SetPassword(string plainText)
         {
