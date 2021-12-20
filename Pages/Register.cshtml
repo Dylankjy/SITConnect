@@ -140,7 +140,7 @@
     <div>
         <label>
             Photo
-            @* <input id="cust_photo" type="file" placeholder="Picture of yourself" asp-for="NewUser.Photo"/> *@
+            <input id="cust_photo" type="file" placeholder="Picture of yourself" asp-for="NewUser.Photo" accept="image/png, image/gif, image/jpeg" required/>
         </label>
     </div>
     <button type="submit">Continue</button>
