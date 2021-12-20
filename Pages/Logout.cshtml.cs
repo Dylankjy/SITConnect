@@ -40,6 +40,7 @@ namespace SITConnect.Pages
 
             // Clears session and logs user out.
             HttpContext.Session.Clear();
+            Response.Cookies.Delete(".AspNetCore.Session");
 
             return RedirectToPage("Index");
         }
