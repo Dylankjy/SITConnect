@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AspNetCore.ReCaptcha;
 using IdGen;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,7 @@ namespace SITConnect.Pages
             return Page();
         }
 
+        [ValidateReCaptcha]
         public IActionResult OnPost()
         {
             if (HttpContext.Session.GetString("otpAuthorisation") == null)

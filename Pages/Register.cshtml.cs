@@ -1,4 +1,5 @@
 ﻿using System;
+using AspNetCore.ReCaptcha;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -45,6 +46,7 @@ namespace SITConnect.Pages
             return Page();
         }
 
+        [ValidateReCaptcha]
         public IActionResult OnPost()
         {
             // Check whether password is strong enough
