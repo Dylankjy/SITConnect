@@ -40,7 +40,7 @@ create table Users
     LastName nvarchar(max) not null,
     BillingCardNo nvarchar(max) not null,
     DateOfBirth date not null,
-    Photo varbinary(max)
+    Photo varchar(max) not null
 )
     go
 
