@@ -25,11 +25,8 @@ namespace SITConnect.Pages
         public IActionResult OnPost()
         {
             // Check whether user is active in session
-            if (HttpContext.Session.GetString("user") == null)
-            {
-                return RedirectToPage("Login");
-            }
-            
+            if (HttpContext.Session.GetString("user") == null) return RedirectToPage("Login");
+
             // Add to audit
             _auditDb.AddLog(new AuditLog
             {

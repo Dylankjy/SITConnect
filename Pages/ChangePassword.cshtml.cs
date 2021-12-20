@@ -35,7 +35,7 @@ namespace SITConnect.Pages
 
             // Get user in session
             var currentUser = new User().FromJson(HttpContext.Session.GetString("user"));
-            
+
             // Get whether user is authorised after OTP
             if (HttpContext.Session.GetString("otpAuthorisation") == "0") return RedirectToPage("Login");
 

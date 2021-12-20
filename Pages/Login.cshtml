@@ -1,6 +1,6 @@
 ﻿@page
-@using Microsoft.AspNetCore.Http
 @using AspNetCore.ReCaptcha
+@using Microsoft.AspNetCore.Http
 @model SITConnect.Pages.Login
 
 @{
@@ -20,7 +20,7 @@
         <p>An OTP code has been sent to your email address. Please check it and key in the 6 digit code below to continue.</p>
         <form method="post">
             @Html.ReCaptcha()
-            <recaptcha />
+            <recaptcha/>
             <div>
                 <label>
                     OTP Code
@@ -41,7 +41,7 @@
     {
         <form method="post">
             @Html.ReCaptcha()
-            <recaptcha />
+            <recaptcha/>
             <div>
                 <label>
                     Email Address

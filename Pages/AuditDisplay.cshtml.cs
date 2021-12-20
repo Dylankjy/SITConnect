@@ -21,21 +21,19 @@ namespace SITConnect.Pages
 
         public List<AuditLog> AuditLogsToDisplay { get; set; }
         public User CurrentUser { get; set; }
-        
+
         public IActionResult OnGet()
         {
             if (HttpContext.Session.GetString("passwordReset") != null) return RedirectToPage("ChangePassword");
-            
+
             // Get whether user is authorised after OTP
             if (HttpContext.Session.GetString("otpAuthorisation") == "0") return RedirectToPage("Login");
-            
+
             if (!ModelState.IsValid && HttpContext.Session.GetString("user") == null)
-            {
                 return RedirectToPage("/Error403");
-            }
-            
+
             CurrentUser = new User().FromJson(HttpContext.Session.GetString("user"));
-            
+
             AuditLogsToDisplay = _auditDb.GetLogsByUserId(CurrentUser.Id).AsEnumerable().Reverse().ToList();
             return Page();
         }
