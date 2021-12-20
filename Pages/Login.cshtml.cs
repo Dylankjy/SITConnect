@@ -180,7 +180,8 @@ namespace SITConnect.Pages
             // Check whether the user needs a password update
             var auditLogsForPasswordChanges = _auditDb.GetLogsByUserId(otpResult.UserId);
             if (!auditLogsForPasswordChanges.Any(o =>
-                o.Timestamp >= DateTime.Now.AddMinutes(-20) && o.LogType == "password_changed"))
+                (o.Timestamp >= DateTime.Now.AddMinutes(-20) && o.LogType == "password_changed") ||
+                (o.Timestamp >= DateTime.Now.AddMinutes(-20) && o.LogType == "create_account")))
             {
                 HttpContext.Session.SetString("passwordReset", "mmm yes you need password update, you insecure child");
                 return RedirectToPage("/ChangePassword");
