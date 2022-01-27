@@ -22,7 +22,7 @@ namespace SITConnect.Models
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
         [Required] public string BillingCardNo { get; set; }
-        [Required] public string Email { get; set; }
+        [Required, EmailAddress] public string Email { get; set; }
 
         // Password private, can only be access by self. To set, use SetPassword()
         public string Password { get; set; }
