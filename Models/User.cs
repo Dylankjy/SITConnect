@@ -35,7 +35,14 @@ namespace SITConnect.Models
             // Using a work factor of 12. 10 is the industry standard.
             var hash = BCrypt.Net.BCrypt.HashPassword(plainText, 12);
 
-            Password = $"{hash};~;{Password}";
+            if (Password == null)
+            {
+                Password = $"{hash}";
+            }
+            else
+            {
+                Password = $"{hash};~;{Password}";
+            }
         }
 
         public bool ComparePassword(string incoming)
