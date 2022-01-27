@@ -105,7 +105,7 @@ namespace SITConnect.Pages
             SuccessMessage = "Your password has been successfully changed.";
 
             // Delete session attribute
-            HttpContext.Session.SetString("passwordReset", null);
+            HttpContext.Session.Remove("passwordReset");
 
             return Page();
         }
